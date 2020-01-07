@@ -1696,10 +1696,6 @@ extern int outsolexs(unsigned char *buff, const sol_t *sol, const ssat_t *ssat,
         if (opt->nmeaintv[1]<0.0) return 0;
         if (!screent(sol->time,ts,ts,opt->nmeaintv[1])) return 0;
     }
-    if (opt->posf==SOLF_NMEA) {
-        p+=outnmea_gsa(p,sol,ssat);
-        p+=outnmea_gsv(p,sol,ssat);
-    }
     return p-buff;
 }
 /* output processing option ----------------------------------------------------
