@@ -531,7 +531,7 @@ static void *rtksvrthread(void *arg)
     obsd_t data[MAXOBS*2];
     sol_t sol={{0}};
     double tt;
-    unsigned int tick,ticknmea,tick1hz,tickreset;
+    unsigned int tick,tick1hz,tickreset;
     unsigned char *p,*q;
     char msg[128];
     int i,j,n,fobs[3]={0},cycle,cputime;
@@ -540,7 +540,7 @@ static void *rtksvrthread(void *arg)
 
     svr->state=1; obs.data=data;
     svr->tick=tickget();
-    ticknmea=tick1hz=svr->tick-50;
+    tick20hz=svr->tick-50;
     tickreset=svr->tick-MIN_INT_RESET;
 
     for (cycle=0;svr->state;cycle++) {
@@ -621,18 +621,13 @@ static void *rtksvrthread(void *arg)
             }
         }
         /* send null solution if no solution (1hz) */
-        if (svr->rtk.sol.stat==SOLQ_NONE&&(int)(tick-tick1hz)>=50) {
+        if (svr->rtk.sol.stat==SOLQ_NONE&&(int)(tick-tick20hz)>=50) {
             writesol(svr,0);
-            tick1hz=tick;
+            tick20hz=tick;
         }
         /* write periodic command to input stream */
         for (i=0;i<3;i++) {
             periodic_cmd(cycle*svr->cycle,svr->cmds_periodic[i],svr->stream+i);
-        }
-        /* send nmea request to base/nrtk input stream */
-        if (svr->nmeacycle>0&&(int)(tick-ticknmea)>=svr->nmeacycle) {
-            send_nmea(svr,&tickreset);
-            ticknmea=tick;
         }
         if ((cputime=(int)(tickget()-tick))>0) svr->cputime=cputime;
 
