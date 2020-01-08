@@ -140,7 +140,7 @@ static void updatesvr(rtksvr_t *svr, int ret, obs_t *obs, nav_t *nav, int sat,
     double pos[3],del[3]={0},dr[3];
     int i,n=0,prn,sbssat=svr->rtk.opt.sbassatsel,sys,iode;
 
-    tracet(4,"updatesvr: ret=%d sat=%2d index=%d\n",ret,sat,index);
+    tracet(4,"updatesvr: ret=%d sat=%2d index=%d iobs=%d\n",ret,sat,index,iobs);
 
     if (ret==1) { /* observation data */
         if (iobs<MAXOBSBUF) {
@@ -620,7 +620,7 @@ static void *rtksvrthread(void *arg)
 #endif
             }
         }
-        /* send null solution if no solution (1hz) */
+        /* send null solution if no solution (20hz) */
         if (svr->rtk.sol.stat==SOLQ_NONE&&(int)(tick-tick20hz)>=50) {
             writesol(svr,0);
             tick20hz=tick;
