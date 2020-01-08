@@ -531,7 +531,7 @@ static void *rtksvrthread(void *arg)
     obsd_t data[MAXOBS*2];
     sol_t sol={{0}};
     double tt;
-    unsigned int tick,tick1hz,tickreset;
+    unsigned int tick,tick20hz,tickreset;
     unsigned char *p,*q;
     char msg[128];
     int i,j,n,fobs[3]={0},cycle,cputime;
