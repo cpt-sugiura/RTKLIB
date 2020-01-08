@@ -2405,9 +2405,11 @@ extern int rtkpos(rtk_t *rtk, const obsd_t *obs, int n, const nav_t *nav)
         rtk->sol.age=(float)timediff(obs[0].time,obs[nu].time);
 
         if (fabs(rtk->sol.age)>opt->maxtdiff) {
-            errmsg(rtk,"age of differential error (age=%.1f)\n",rtk->sol.age);
+            errmsg(rtk,"age of differential error (age=%.1f, obs[0].time=%ld & %lf, obs[nu].time=%ld & %lf)\n", rtk->sol.age,obs[0].time.time, obs[0].time.sec,obs[nu].time.time, obs[nu].time.sec);
             outsolstat(rtk,nav);
             return 1;
+        }else{
+            errmsg(rtk,"age of differential info (age=%.1f, obs[0].time=%ld & %lf, obs[nu].time=%ld & %lf)\n", rtk->sol.age,obs[0].time.time, obs[0].time.sec,obs[nu].time.time, obs[nu].time.sec);
         }
     }
     /* relative potitioning */
