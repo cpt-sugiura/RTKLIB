@@ -2322,8 +2322,12 @@ extern int rtkpos(rtk_t *rtk, const obsd_t *obs, int n, const nav_t *nav)
     gtime_t time;
     int i,nu,nr;
     char msg[128]="";
-
-    trace(3,"rtkpos  : time=%s n=%d\n",time_str(obs[0].time,3),n);
+    unsigned int tick;
+    tick = tickget();
+    trace(3,"rtkpos start: n=%d\n", n);
+    trace(3,"rtkpos      : time=%s n=%d\n",time_str(obs[0].time,3),n);
+    trace(3,"current time=%ld\n", time(NULL));
+    trace(3,"obs time=%ld\n", obs[0].time.time);
     trace(4,"obs=\n"); traceobs(4,obs,n);
     /*trace(5,"nav=\n"); tracenav(5,nav);*/
 
@@ -2415,6 +2419,7 @@ extern int rtkpos(rtk_t *rtk, const obsd_t *obs, int n, const nav_t *nav)
     /* relative potitioning */
     relpos(rtk,obs,nu,nr,nav);
     outsolstat(rtk,nav);
+    trace(3,"rtkpos end: n=%d cputime=%d\n",n,(int)(tickget()-tick));
 
     return 1;
 }

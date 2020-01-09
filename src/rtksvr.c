@@ -598,16 +598,12 @@ static void *rtksvrthread(void *arg)
                 obs.data[obs.n++]=svr->obs[1][0].data[j];
             }
             /* carrier phase bias correction */
-            tracet(3,"rtksvrthread cycle start carrier phase bias in index %d: cputime=%d\n",i,(int)(tickget()-tick));
             if (!strstr(svr->rtk.opt.pppopt,"-DIS_FCB")) {
                 corr_phase_bias(obs.data,obs.n,&svr->nav);
             }
             /* rtk positioning */
-            tracet(3,"rtksvrthread cycle start rtksvrlock in index %d: cputime=%d\n",i,(int)(tickget()-tick));
             rtksvrlock(svr);
-            tracet(3,"rtksvrthread cycle start rtksvrpos in index %d: cputime=%d\n",i,(int)(tickget()-tick));
             rtkpos(&svr->rtk,obs.data,obs.n,&svr->nav);
-            tracet(3,"rtksvrthread cycle start rtksvrunlock in index %d: cputime=%d\n",i,(int)(tickget()-tick));
             rtksvrunlock(svr);
 
             if (svr->rtk.sol.stat!=SOLQ_NONE) {
@@ -617,7 +613,6 @@ static void *rtksvrthread(void *arg)
                 timeset(gpst2utc(timeadd(svr->rtk.sol.time,tt)));
 
                 /* write solution */
-                tracet(3,"rtksvrthread cycle start writesol in index %d: cputime=%d\n",i,(int)(tickget()-tick));
                 writesol(svr,i);
             }
             /* if cpu overload, inclement obs outage counter and break */
