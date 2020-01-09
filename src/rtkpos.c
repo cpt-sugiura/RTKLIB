@@ -43,6 +43,7 @@
 *           2018/12/15 1.14 disable ambiguity resolution for gps-qzss
 *-----------------------------------------------------------------------------*/
 #include <stdarg.h>
+#include <time.h>
 #include "rtklib.h"
 
 /* constants/macros ----------------------------------------------------------*/
@@ -2323,11 +2324,22 @@ extern int rtkpos(rtk_t *rtk, const obsd_t *obs, int n, const nav_t *nav)
     int i,nu,nr;
     char msg[128]="";
     unsigned int tick;
+    time_t timer;
+    struct tm *utc;
+
     tick = tickget();
     trace(3,"rtkpos start: n=%d\n", n);
     trace(3,"rtkpos      : time=%s n=%d\n",time_str(obs[0].time,3),n);
-    trace(3,"current time=%d\n", (int)tickget());
-    trace(3,"obs time=%ld\n", obs[0].time.time);
+    timer = time(NULL);
+    utc = gmtime(&timer);
+    trace(3,"current time=%4d/%2d/%2d %2d:%2d:%2d:\n", utc->tm_year + 1900
+                                                     , utc->tm_mon + 1
+                                                     , utc->tm_mday
+                                                     , utc->tm_hour
+                                                     , utc->tm_min
+                                                     , utc->tm_sec);
+
+    trace(3,"obs     time=%ld\n", obs[0].time.time);
     trace(4,"obs=\n"); traceobs(4,obs,n);
     /*trace(5,"nav=\n"); tracenav(5,nav);*/
 
