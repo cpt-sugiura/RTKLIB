@@ -2326,7 +2326,7 @@ extern int rtkpos(rtk_t *rtk, const obsd_t *obs, int n, const nav_t *nav)
     tick = tickget();
     trace(3,"rtkpos start: n=%d\n", n);
     trace(3,"rtkpos      : time=%s n=%d\n",time_str(obs[0].time,3),n);
-    trace(3,"current time=%ld\n", time(NULL));
+    trace(3,"current time=%d\n", (int)tickget());
     trace(3,"obs time=%ld\n", obs[0].time.time);
     trace(4,"obs=\n"); traceobs(4,obs,n);
     /*trace(5,"nav=\n"); tracenav(5,nav);*/
