@@ -2329,17 +2329,7 @@ extern int rtkpos(rtk_t *rtk, const obsd_t *obs, int n, const nav_t *nav)
 
     tick = tickget();
     tracet(3,"rtkpos start: n=%d\n", n);
-    tracet(3,"rtkpos  : time=%s n=%d\n",time_str(obs[0].time,3),n);
-    timer = time(NULL);
-    utc = gmtime(&timer);
-    tracet(3,"  current time=%4d/%2d/%2d %2d:%2d:%2d\n", utc->tm_year + 1900
-                                                     , utc->tm_mon + 1
-                                                     , utc->tm_mday
-                                                     , utc->tm_hour
-                                                     , utc->tm_min
-                                                     , utc->tm_sec);
-
-    tracet(3,"obs     time=%ld\n", obs[0].time.time);
+    tracet(3,"rtkpos: time=%s\n",time_str(obs[0].time,3));
     tracet(4,"obs=\n"); traceobs(4,obs,n);
     /*trace(5,"nav=\n"); tracenav(5,nav);*/
 
