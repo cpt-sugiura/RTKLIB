@@ -545,6 +545,7 @@ static void *rtksvrthread(void *arg)
 
     for (cycle=0;svr->state;cycle++) {
         tick=tickget();
+        tracet(3,"rtksvrthread cycle start:\n",);
 
         for (i=0;i<3;i++) {
             p=svr->buff[i]+svr->nb[i]; q=svr->buff[i]+svr->buffsize;
@@ -631,6 +632,7 @@ static void *rtksvrthread(void *arg)
         }
         if ((cputime=(int)(tickget()-tick))>0) svr->cputime=cputime;
 
+        tracet(3,"rtksvrthread cycle end: cputime=%d\n", cputime);
         /* sleep until next cycle */
         sleepms(svr->cycle-cputime);
     }
