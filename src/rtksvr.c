@@ -546,7 +546,6 @@ static void *rtksvrthread(void *arg)
     for (cycle=0;svr->state;cycle++) {
         tick=tickget();
         tracet(3,"rtksvrthread cycle start:\n");
-
         for (i=0;i<3;i++) {
             p=svr->buff[i]+svr->nb[i]; q=svr->buff[i]+svr->buffsize;
 
@@ -565,6 +564,8 @@ static void *rtksvrthread(void *arg)
             svr->npb[i]+=n;
             rtksvrunlock(svr);
         }
+
+        tracet(3,"rtksvrthread cycle in 568: cputime=%d\n",(int)(tickget()-tick))
         for (i=0;i<3;i++) {
             if (svr->format[i]==STRFMT_SP3||svr->format[i]==STRFMT_RNXCLK) {
                 /* decode download file */
@@ -576,6 +577,7 @@ static void *rtksvrthread(void *arg)
             }
         }
         /* averaging single base pos */
+        tracet(3,"rtksvrthread cycle in 580: cputime=%d\n",(int)(tickget()-tick))
         if (fobs[1]>0&&svr->rtk.opt.refpos==POSOPT_SINGLE) {
             if ((svr->rtk.opt.maxaveep<=0||svr->nave<svr->rtk.opt.maxaveep)&&
                 pntpos(svr->obs[1][0].data,svr->obs[1][0].n,&svr->nav,
@@ -587,6 +589,7 @@ static void *rtksvrthread(void *arg)
             }
             for (i=0;i<3;i++) svr->rtk.opt.rb[i]=svr->rb_ave[i];
         }
+        tracet(3,"rtksvrthread cycle in 592: cputime=%d\n",(int)(tickget()-tick))
         for (i=0;i<fobs[0];i++) { /* for each rover observation data */
             obs.n=0;
             for (j=0;j<svr->obs[0][i].n&&obs.n<MAXOBS*2;j++) {
@@ -622,11 +625,13 @@ static void *rtksvrthread(void *arg)
             }
         }
         /* send null solution if no solution (20hz) */
+        tracet(3,"rtksvrthread cycle in 628: cputime=%d\n",(int)(tickget()-tick))
         if (svr->rtk.sol.stat==SOLQ_NONE&&(int)(tick-tick20hz)>=50) {
             writesol(svr,0);
             tick20hz=tick;
         }
         /* write periodic command to input stream */
+        tracet(3,"rtksvrthread cycle in 634: cputime=%d\n",(int)(tickget()-tick))
         for (i=0;i<3;i++) {
             periodic_cmd(cycle*svr->cycle,svr->cmds_periodic[i],svr->stream+i);
         }
