@@ -2324,8 +2324,6 @@ extern int rtkpos(rtk_t *rtk, const obsd_t *obs, int n, const nav_t *nav)
     int i,nu,nr;
     char msg[128]="";
     unsigned int tick;
-    time_t timer;
-    struct tm *utc;
 
     tick = tickget();
     tracet(3,"rtkpos start: n=%d\n", n);
