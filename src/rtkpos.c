@@ -2320,7 +2320,7 @@ extern int rtkpos(rtk_t *rtk, const obsd_t *obs, int n, const nav_t *nav)
 {
     prcopt_t *opt=&rtk->opt;
     sol_t solb={{0}};
-    gtime_t time;
+    gtime_t gtime;
     int i,nu,nr;
     char msg[128]="";
     unsigned int tick;
@@ -2352,7 +2352,7 @@ extern int rtkpos(rtk_t *rtk, const obsd_t *obs, int n, const nav_t *nav)
     for (nu=0;nu   <n&&obs[nu   ].rcv==1;nu++) ;
     for (nr=0;nu+nr<n&&obs[nu+nr].rcv==2;nr++) ;
 
-    time=rtk->sol.time; /* previous epoch */
+    gtime=rtk->sol.time; /* previous epoch */
 
     /* rover position by single point positioning */
     if (!pntpos(obs,nu,nav,&rtk->opt,&rtk->sol,NULL,rtk->ssat,msg)) {
@@ -2363,7 +2363,7 @@ extern int rtkpos(rtk_t *rtk, const obsd_t *obs, int n, const nav_t *nav)
             return 0;
         }
     }
-    if (time.time!=0) rtk->tt=timediff(rtk->sol.time,time);
+    if (gtime.time!=0) rtk->tt=timediff(rtk->sol.time,gtime);
 
     /* return to static start if long delay without rover data */
     if (fabs(rtk->tt)>300&&rtk->initial_mode==PMODE_STATIC_START) {
