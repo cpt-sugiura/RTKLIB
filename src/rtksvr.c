@@ -545,7 +545,7 @@ static void *rtksvrthread(void *arg)
 
     for (cycle=0;svr->state;cycle++) {
         tick=tickget();
-        tracet(3,"rtksvrthread cycle start:\n",);
+        tracet(3,"rtksvrthread cycle start:\n");
 
         for (i=0;i<3;i++) {
             p=svr->buff[i]+svr->nb[i]; q=svr->buff[i]+svr->buffsize;
